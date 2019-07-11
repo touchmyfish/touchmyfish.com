@@ -9,7 +9,7 @@ google_analytics: 'UA-126817847-3'
 comment_gitalk_clientId: 'c00c8118274d907f3b2f'
 comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
 comment_gitalk_repo: 'touchmyfish.com'
-github_username: 'touchmyfish'
+github_username: 'elfgzp'
 mailchimp-list: 
 include: ["_pages"]
 permalink: /:title/
