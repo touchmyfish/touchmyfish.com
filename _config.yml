@@ -1,13 +1,16 @@
 # Site
-name: "Mediumish"
-title: "Mediumish"
-description: "Jekyll template, Medium styled, free for bloggers."
+name: "Touch My Fish"
+title: "Touch My Fish"
+description: "热爱技术的小伙伴集结地，一起分享技术，一起摸鱼吧🐟"
 logo: 'assets/images/logo.png'
 favicon: 'assets/images/logo.png'
 baseurl: ''
-google_analytics: 'UA-46278016-1'
-disqus: 'demowebsite'
-mailchimp-list: 'https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b'
+google_analytics: 'UA-126817847-3'
+comment_gitalk_clientId: 'c00c8118274d907f3b2f'
+comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
+comment_gitalk_repo: 'touchmyfish.com'
+github_username: 'touchmyfish'
+mailchimp-list: 
 include: ["_pages"]
 permalink: /:title/
 
