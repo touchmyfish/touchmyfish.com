@@ -9,8 +9,9 @@ google_analytics: 'UA-126817847-3'
 comment_gitalk_clientId: 'c00c8118274d907f3b2f'
 comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
 comment_gitalk_repo: 'touchmyfish.com'
-github_username: 'elfgzp'
-mailchimp-list: 
+comment_gitalk_repo_owner: 'touchmyfish'
+comment_gitalk_repo_admin: 'elfgzp'
+mailchimp-list:
 include: ["_pages"]
 permalink: /:title/
 
@@ -26,7 +27,7 @@ authors:
     description: "Author of Mediumish, a Bootstrap Medium styled template available for WordPress, HTML, Ghost and Jekyll. You are currently previewing Jekyll template demo."
   john:
     name: John
-    display_name: John    
+    display_name: John
     avatar: 'assets/images/avatar.png'
     gravatar: b1cc14991db7a456fcd761680bbc8f81
     email: wowthemesnet@gmail.com
@@ -41,7 +42,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-archives
-    
+
 # Archives
 jekyll-archives:
   enabled:
@@ -49,11 +50,11 @@ jekyll-archives:
   layout: archive
   permalinks:
     category: '/category/:name/'
-    
-# Pagination 
+
+# Pagination
 paginate: 6
 paginate_path: /page:num/
-    
+
 # Other
 markdown: kramdown
 
