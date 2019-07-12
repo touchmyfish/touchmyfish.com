@@ -525,8 +525,8 @@ ul.tags li a:hover {
 }
 
 .btn.follow {
-    border-color: #02B875;
-    color: #1C9963;
+    border-color: #24292e;
+    color: #24292e;
     padding: 3px 10px;
     text-align: center;
     border-radius: 999em;
@@ -547,7 +547,7 @@ ul.tags li a:hover {
 }
 
 .post-top-meta .btn.follow {
-    margin-left: 5px;
+    margin-left: 30px;
     margin-top: -4px;
 }
 
