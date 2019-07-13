@@ -1,2 +1,2 @@
 #!/bin/bash
-bundle install
+bundle installbundle exec rake

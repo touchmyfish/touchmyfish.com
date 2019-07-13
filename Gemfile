@@ -8,7 +8,9 @@ source "https://rubygems.org"
 #
 
 # If you have any plugins, put them here!
+gem 'rake' , '>= 0.9.2'
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+gem "jekyll", "~> 3.8.6"
 group :jekyll_plugins do
     gem 'jekyll-feed'
     gem 'jekyll-sitemap'

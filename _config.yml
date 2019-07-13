@@ -11,8 +11,10 @@ comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
 comment_gitalk_repo: 'touchmyfish.com'
 comment_gitalk_repo_owner: 'touchmyfish'
 comment_gitalk_repo_admin: 'elfgzp'
-mailchimp-list:
-include: ["_pages"]
+include: 
+  - _pages
+exclude:
+  - vendor
 permalink: /:title/
 
 # Authors
