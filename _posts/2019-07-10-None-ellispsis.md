@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "两个常量对象，None 与。..(ellipsis)"
+title:  "两个常量对象，None 与 ...(ellipsis)"
 author: Sky
 categories: [ Python ]
 tags: [ Python ]
