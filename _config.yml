@@ -15,18 +15,33 @@ include:
   - _pages
 exclude:
   - vendor
-permalink: /:title/
+  - changelog.md
+  - LICENSE.txt
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+permalink: /:categories/:year/:month/:day/:title/
 
 # Authors
 authors:
   Sky:
     name: Sky
     display_name: Sky
-    avatar: 'assets/images/sky_avatar.png'
+    avatar: 'assets/images/avatar/sky.png'
     email: lecw199@163.com
     web: ''
     github: 'https://github.com/lecw199'
     description: "锅盖头"
+
+authors:
+  elfgzp:
+    name: elfgzp
+    display_name: elfgzp
+    avatar: 'assets/images/avatar/elfgzp.jpeg'
+    email: 741424975@qq.com
+    web: 'https://elfgzp.cn'
+    github: 'https://github.com/elfgzp'
+    description: "一个兴趣使然的程序员 🐱"
 
 # Plugins
 plugins:
@@ -65,5 +80,3 @@ adsense-data-ad-slot: "1363087678"
 
 # Lazy Images ("enabled" or "disabled")
 lazyimages: "disabled"
-
-exclude: [changelog.md, LICENSE.txt, README.md, Gemfile, Gemfile.lock]

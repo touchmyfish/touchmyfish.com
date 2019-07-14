@@ -4,7 +4,7 @@ title:  "两个常量对象，None 与 ...(ellipsis)"
 author: Sky
 categories: [ Python ]
 tags: [ Python ]
-image: assets/images/2019-07-10-None-ellispsis.jpg
+image: assets/images/2019-07-10-None-ellispsis/2019-07-10-None-ellispsis.jpg
 description: "None 与。..(ellipsis)"
 date: 2019-07-10 18:00:00 +0800
 featured: true
