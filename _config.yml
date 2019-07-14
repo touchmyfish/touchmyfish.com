@@ -15,6 +15,7 @@ include:
   - _pages
 exclude:
   - vendor
+  - .gitignore
 permalink: /:categories/:year/:month/:day/:title/
 
 # Authors
