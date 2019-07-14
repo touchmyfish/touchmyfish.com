@@ -3,7 +3,6 @@ cache: bundler
 rvm:
 - 2.3.3
 script:
-- rm -rf .bundle && rm -rf vendor
 - bundle install
 - bundle exec jekyll build
 after_success:
