@@ -15,11 +15,6 @@ include:
   - _pages
 exclude:
   - vendor
-  - changelog.md
-  - LICENSE.txt
-  - README.md
-  - Gemfile
-  - Gemfile.lock
 permalink: /:categories/:year/:month/:day/:title/
 
 # Authors
