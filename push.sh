@@ -10,6 +10,7 @@ touch .nojekyll
 git config credential.helper "store --file=.git/credentials"
 echo "https://${GH_TOKEN}:@github.com" > .git/credentials
 echo "touchmyfish.com" > CNAME
+rm -rf .gitignore
 git add .
 git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 git push origin gh-pages -f
