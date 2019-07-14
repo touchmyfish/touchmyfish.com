@@ -16,7 +16,7 @@ include:
 exclude:
   - vendor
   - .gitignore
-permalink: /:year/:month/:day/:categories/:title/
+permalink: /:categories/:year/:month/:day/:title/
 
 # Authors
 authors:
