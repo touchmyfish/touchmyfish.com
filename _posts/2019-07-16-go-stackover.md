@@ -7,9 +7,6 @@ tags: [golang]
 image: assets/images/vnotes/2019-07-16-go-stackover.jpg
 description: struct String() 遇到的坑
 date: 2019-07-16 17:00:00 +0800
-featured: true
-hidden: true
-rating: null
 ---
 
 在 GO 里实现 String 方法会格式化输出。例如：

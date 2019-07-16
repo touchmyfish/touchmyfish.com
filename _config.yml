@@ -11,12 +11,9 @@ comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
 comment_gitalk_repo: 'touchmyfish.com'
 comment_gitalk_repo_owner: 'touchmyfish'
 comment_gitalk_repo_admin: 'elfgzp'
-include:
-  - _pages
-exclude:
-  - vendor
-  - .gitignore
-permalink: /:categories/:year/:month/:day/:title/
+exclude: ["vendor"]
+include: ["_pages"]
+# permalink: /:categories/:year/:month/:day/:title/
 
 # Authors
 authors:
@@ -58,12 +55,10 @@ jekyll-archives:
   enabled:
     - categories
   layout: archive
-  permalinks:
-    category: '/category/:name/'
 
 # Pagination
 paginate: 6
-paginate_path: /page:num/
+paginate_path: "page:num"
 
 # Other
 markdown: kramdown

@@ -13,14 +13,8 @@ title: Home
     </div>
     <div class="row">
 
-    {% for post in site.posts %}
-
-        {% if post.featured == true %}
-
-            {% include featuredbox.html %}
-
-        {% endif %}
-
+    {% for post in site.posts limit:2 %}
+        {% include featuredbox.html %}
     {% endfor %}
 
     </div>
