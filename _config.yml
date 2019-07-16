@@ -11,7 +11,7 @@ comment_gitalk_clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba'
 comment_gitalk_repo: 'touchmyfish.com'
 comment_gitalk_repo_owner: 'touchmyfish'
 comment_gitalk_repo_admin: 'elfgzp'
-include: 
+include:
   - _pages
 exclude:
   - vendor
@@ -36,6 +36,14 @@ authors:
     web: 'https://elfgzp.cn'
     github: 'https://github.com/elfgzp'
     description: "一个兴趣使然的程序员 🐱"
+  vnotes:
+    name: vnotes
+    display_name: vnotes
+    avatar: 'assets/images/avatar/mianma.png'
+    email: "vnotes@protonmail.com"
+    web: 'https://www.jianshu.com/u/a06aea098aac'
+    github: 'https://github.com/vnotes'
+    description: ""
 
 # Plugins
 plugins:
