@@ -62,7 +62,9 @@ post_class: post-template
                 {% endif %}
             {% else %}
             <!-- hash page cover from notion -->
-                <img class="featured-image img-fluid" src="{{site.notion_covers[{{ {{ page.title | size }} |modulo:49 }}]}}">
+                {% assign title_size = {{ page.title | size }} %}
+                {% assign cover_index = {{ title_size | modulo:49 }} %} 
+                <img class="featured-image img-fluid" src="{{site.notion_covers[cover_index]}}">
             {% endif %}
             <!-- End Featured Image -->
 
