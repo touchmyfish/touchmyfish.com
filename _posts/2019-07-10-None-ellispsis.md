@@ -9,9 +9,6 @@ description: "None 与。..(ellipsis)"
 date: 2019-07-10 18:00:00 +0800
 ---
 
-
-## 2019-07-10   两个常量对象, None与...(ellipsis)
-
 本文介绍了两个常量对象None与...(ellipsis)的一些特性，前者非常常见，后者却非常少用，但其实它有一些非常pythonic的用法。
 
 
