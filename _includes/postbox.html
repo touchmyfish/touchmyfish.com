@@ -9,7 +9,7 @@
                     {% if post.image contains "://" %}
                         {% assign cover_url =  post.image %}
                     {% else %}
-                        {% assign cover_url =  site.baseurl + "/" + post.image %}
+                        {% assign cover_url =  site.baseurl | append: "/" | append: post.image %}
                     {% endif %}
                 {% else %}
                     {% assign title_size =  post.title | size  %}
