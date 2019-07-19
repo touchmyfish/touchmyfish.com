@@ -12,7 +12,7 @@
                         {% assign cover_url =  site.baseurl + "/" + post.image %}
                     {% endif %}
                 {% else %}
-                    {% assign title_size =  page.title | size  %}
+                    {% assign title_size =  post.title | size  %}
                     {% assign cover_index = title_size | modulo:49  %} 
                     {% assign cover_url = site.notion_covers[cover_index] %}
                 {% endif %}
