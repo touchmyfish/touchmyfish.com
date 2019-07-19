@@ -61,9 +61,8 @@ post_class: post-template
                 <img class="featured-image img-fluid" src="{% if page.image contains "://" %}{{ page.image }}{% else %}{{ site.baseurl }}/{{ page.image }}{% endif %}" alt="{{ page.title }}">
                 {% endif %}
             {% else %}
-            <!-- randm page cover from notion -->
-
-
+            <!-- hash page cover from notion -->
+                <img class="featured-image img-fluid" src="{{site.notion_covers[{{ {{ page.title | size }} |modulo:49 }}]}}">
             {% endif %}
             <!-- End Featured Image -->
 
