@@ -9,8 +9,13 @@ description: "None 与。..(ellipsis)"
 date: 2019-07-10 18:00:00 +0800
 ---
 
-### 1、None 对象
 
+## 2019-07-10   两个常量对象, None与...(ellipsis)
+
+本文介绍了两个常量对象None与...(ellipsis)的一些特性，前者非常常见，后者却非常少用，但其实它有一些非常pythonic的用法。
+
+
+### python版本
 ```python
 # python 版本
 import sys
@@ -23,7 +28,10 @@ print(sys.version)
 [GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)]
 ```
 
-None 只是一个特殊的对象，不是 False，也不是 Null
+
+### 1、None对象
+
+None只是一个特殊的对象，不是False，也不是Null
 
 ```python
 print(type(None))
@@ -32,6 +40,8 @@ print(type(None))
 ```
 <class 'NoneType'>
 ```
+
+
 
 ```python
 # 1. 单例属性
@@ -44,6 +54,8 @@ print (a == b)
 ```
 True
 ```
+
+
 
 ```python
 #2. 用is 和is not判断
@@ -61,6 +73,8 @@ if b is not None:
 a is None
 b is not None
 ```
+
+
 
 ```python
 #3. 不可添加或者更改属性
@@ -82,6 +96,8 @@ AttributeError                            Traceback (most recent call last)
 ```
 AttributeError: 'NoneType' object has no attribute 'test'
 ```
+
+
 
 ```python
 # 4.  函数不明确return，默认返回None
@@ -112,6 +128,8 @@ print(type(...))
 <class 'ellipsis'>
 ```
 
+
+
 ```python
 #1. 单例属性
 t = ...
@@ -122,6 +140,8 @@ print (t == d)
 ```
 True
 ```
+
+
 
 ```python
 #2. 用is 和is not判断
@@ -138,6 +158,8 @@ if a is ...:
 a is not None
 a is ...
 ```
+
+
 
 ```python
 #3. 不可添加或者更改属性
@@ -163,6 +185,8 @@ AttributeError: 'ellipsis' object has no attribute 'test'
 
 ```
 
+
+
 ```python
 #5. bool类型
 print (bool(...))
@@ -173,6 +197,9 @@ print (bool(...))
 True
 
 ```
+
+
+### ellipsis对象的pythonic用法
 
 ```python
 #6.  用法, 无限递推 (from https://farer.org/2017/11/29/python-ellipsis-object/)
@@ -217,6 +244,8 @@ for i in ap[1,2,...]:
 19
 ```
 
+
+
 ```python
 #7. numpy中的玩法(实现原理同上)
 import numpy as np
@@ -232,6 +261,8 @@ print (a)
 [[ 0  2  4]
  [ 6  8 10]]
 ```
+
+
 
 ```python
 #8. type hints用法
