@@ -6,13 +6,20 @@
         <div class="maxthumb">
             <a href="{{ site.baseurl }}{{ post.url }}">
                 {% if post.image %}
-
-                    {% if site.lazyimages == "enabled" %}
-                        <img class="img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{% if post.image contains "://" %}{{ post.image }}{% else %}{{ site.baseurl }}/{{ post.image }}{% endif %}" alt="{{ post.title }}">
+                    {% if post.image contains "://" %}
+                        {% assign cover_url =  post.image %}
                     {% else %}
-                        <img class="img-fluid" src="{% if post.image contains "://" %}{{ post.image }}{% else %}{{ site.baseurl }}/{{ post.image }}{% endif %}" alt="{{ post.title }}"> 
+                        {% assign cover_url =  site.baseurl + "/" + post.image %}
                     {% endif %}
-
+                {% else %}
+                    {% assign title_size =  page.title | size  %}
+                    {% assign cover_index = title_size | modulo:49  %} 
+                    {% assign cover_url = site.notion_covers[cover_index] %}
+                {% endif %}
+                {% if site.lazyimages == "enabled" %}
+                    <img class="featured-box-img-cover lazyimg"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ cover_url }}">
+                {% else %}
+                    <img class="featured-image img-fluid" src="{{ cover_url }}">
                 {% endif %}
             </a>
         </div>
