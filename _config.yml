@@ -41,6 +41,14 @@ authors:
     web: 'https://www.jianshu.com/u/a06aea098aac'
     github: 'https://github.com/vnotes'
     description: ""
+  Mayne:
+    name: Mayne
+    display_name: Mayne
+    avatar: 'https://avatars1.githubusercontent.com/u/6588202?s=460&v=4'
+    email: dreama9ain@gmail.com
+    web: 'https://gine.me'
+    github: 'https://github.com/mayneyao'
+    description: "挖坑狂魔"
 
 # Plugins
 plugins:
