@@ -25,7 +25,7 @@ post_class: post-template
                 <div class="row post-top-meta">
                     <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
                         {% if author.avatar %}
-                            {% if author.avatar contains '://' %}
+                            {% if author.avatar contains "://" %}
                                     <img class="author-thumb" src="{{ author.avatar }}" alt="{{ author.display_name }}">
                             {% else %}
                                     <img class="author-thumb" src="{{site.baseurl}}/{{ author.avatar }}" alt="{{ author.display_name }}">
