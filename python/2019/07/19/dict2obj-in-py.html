@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/assets/images/logo.png">
+
+<title>Python 中如何优雅地将字典转化对象 | Touch My Fish</title>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Python 中如何优雅地将字典转化对象 | Touch My Fish</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Python 中如何优雅地将字典转化对象" />
+<meta name="author" content="Mayne" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="能少敲4个字符呢" />
+<meta property="og:description" content="能少敲4个字符呢" />
+<meta property="og:site_name" content="Touch My Fish" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-19T03:29:00+00:00" />
+<script type="application/ld+json">
+{"description":"能少敲4个字符呢","author":{"@type":"Person","name":"Mayne"},"@type":"BlogPosting","url":"/python/2019/07/19/dict2obj-in-py.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/assets/images/logo.png"},"name":"Mayne"},"headline":"Python 中如何优雅地将字典转化对象","dateModified":"2019-07-19T03:29:00+00:00","datePublished":"2019-07-19T03:29:00+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"/python/2019/07/19/dict2obj-in-py.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/assets/css/screen.css" rel="stylesheet">
+
+<link href="/assets/css/main.css" rel="stylesheet">
+
+<script src="/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="Touch My Fish">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/index.html">文章</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/categories">分类</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/about">关于我们</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/touchmyfish/touchmyfish.com"><i class="fab fa-github"></i> Star on Github</a>
+                </li>
+
+                <script src="/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="搜索 ..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Touch My Fish</h1>
+    <p class="lead">
+        热爱技术的小伙伴集结地，一起分享技术，一起摸鱼吧🐟
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=Python 中如何优雅地将字典转化对象&url=/python/2019/07/19/dict2obj-in-py.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=/python/2019/07/19/dict2obj-in-py.html" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=/python/2019/07/19/dict2obj-in-py.html" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                            
+                                    <img class="author-thumb" src="https://avatars1.githubusercontent.com/u/6588202?s=460&v=4" alt="Mayne">
+                            
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://gine.me">Mayne</a><a target="_blank" href="https://github.com/mayneyao" class="btn follow">Follow</a>
+                        </br>
+                        <span class="author-description">挖坑狂魔</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">Python 中如何优雅地将字典转化对象</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+            <!-- hash page cover from notion -->
+                
+                 
+                <img class="featured-image img-fluid" src="https://www.notion.so/images/page-cover/nasa_space_shuttle_columbia_and_sunrise.jpg">
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <h2 id="羡慕-js-的语法糖">羡慕 JS 的语法糖</h2>
+
+<p>先看下面一段 JS 代码</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">npc</span> <span class="o">=</span>  <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">first</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">san</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">last</span><span class="p">:</span> <span class="dl">"</span><span class="s2">zhang</span><span class="dl">"</span>
+        <span class="p">},</span>
+        <span class="na">hp</span><span class="p">:</span> <span class="mi">1000</span>
+<span class="p">}</span>
+
+<span class="nx">npc</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">first</span>
+<span class="c1">// "san"</span>
+
+<span class="nx">npc</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">].</span><span class="nx">first</span>
+<span class="c1">// "san"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>JS中的“字典”天然就是一个对象，所以可以通过点的方式访问对象属性。而 python 中通过键获取映射值通常需要下面这样。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="n">a_dict</span><span class="p">[</span><span class="s">"key"</span><span class="p">]</span> 
+<span class="n">a_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"key"</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>有点怀念 JS 简洁的语法了。你要知道用点访问，可以少敲 <code class="highlighter-rouge">[</code> 、 <code class="highlighter-rouge">"</code> *2 、 <code class="highlighter-rouge">]</code>  4 个字符，这个语法糖难道不甜嘛？</p>
+
+<p>在 python 中要用点访问，必须把字典转化为对象。</p>
+
+<h2 id="字典转对象">字典转对象</h2>
+
+<p>强大的内置电池</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">npc</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="o">...</span><span class="p">:</span>  <span class="s">'name'</span><span class="p">:</span> <span class="p">{</span>
+   <span class="o">...</span><span class="p">:</span>    <span class="s">'first'</span><span class="p">:</span> <span class="s">'san'</span><span class="p">,</span>
+   <span class="o">...</span><span class="p">:</span>    <span class="s">'last'</span><span class="p">:</span> <span class="s">'zhang'</span>
+   <span class="o">...</span><span class="p">:</span>  <span class="p">},</span>
+   <span class="o">...</span><span class="p">:</span>  <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span>
+   <span class="o">...</span><span class="p">:</span> <span class="p">}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">npc</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'san'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'zhang'</span><span class="p">},</span> <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">npc</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="n">npc</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">npc</span><span class="o">.</span><span class="n">hp</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="mi">1000</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>到目前为止一切 OK，又可以点点点了。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">npc</span><span class="o">.</span><span class="n">name</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'san'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'zhang'</span><span class="p">}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">npc</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="nb">AttributeError</span>                            <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">7</span><span class="o">-</span><span class="mi">7749</span><span class="n">b491d382</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="n">npc</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span>
+
+<span class="nb">AttributeError</span><span class="p">:</span> <span class="s">'dict'</span> <span class="nb">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">'first'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>很明显，对于嵌套字典 <code class="highlighter-rouge">SimpleNamespace</code> 没法自动处理，只能转换第一层字典为对象。我们需要对其进行递归处理。</p>
+
+<h2 id="处理通用的嵌套字典">处理通用的嵌套字典</h2>
+
+<p>嵌套字典中的值，可能是 list，可能是 dict，也可能是基础数据类型。因此在处理递归的过程中，我们需要对不同类型的值，做不同的处理。</p>
+
+<p>下面推荐内置电池中的 <code class="highlighter-rouge">singledispatch</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">singledispatch</span><span class="err">?</span>
+<span class="n">Signature</span><span class="p">:</span> <span class="n">singledispatch</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="n">Docstring</span><span class="p">:</span>
+<span class="n">Single</span><span class="o">-</span><span class="n">dispatch</span> <span class="n">generic</span> <span class="n">function</span> <span class="n">decorator</span><span class="o">.</span>
+
+<span class="n">Transforms</span> <span class="n">a</span> <span class="n">function</span> <span class="n">into</span> <span class="n">a</span> <span class="n">generic</span> <span class="n">function</span><span class="p">,</span> <span class="n">which</span> <span class="n">can</span> <span class="n">have</span> <span class="n">different</span>
+<span class="n">behaviours</span> <span class="n">depending</span> <span class="n">upon</span> <span class="n">the</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">its</span> <span class="n">first</span> <span class="n">argument</span><span class="o">.</span> <span class="n">The</span> <span class="n">decorated</span>
+<span class="n">function</span> <span class="n">acts</span> <span class="k">as</span> <span class="n">the</span> <span class="n">default</span> <span class="n">implementation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">additional</span>
+<span class="n">implementations</span> <span class="n">can</span> <span class="n">be</span> <span class="n">registered</span> <span class="n">using</span> <span class="n">the</span> <span class="n">register</span><span class="p">()</span> <span class="n">attribute</span> <span class="n">of</span> <span class="n">the</span>
+<span class="n">generic</span> <span class="n">function</span><span class="o">.</span>
+<span class="n">File</span><span class="p">:</span>      <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="mf">3.7.3</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">Python</span><span class="o">.</span><span class="n">framework</span><span class="o">/</span><span class="n">Versions</span><span class="o">/</span><span class="mf">3.7</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.7</span><span class="o">/</span><span class="n">functools</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Type</span><span class="p">:</span>      <span class="n">function</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>简单的说，它是一个装饰器。可以为被装饰函数第一个参数，注册不同的处理逻辑。</p>
+
+<p>举个例子</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="o">@</span><span class="n">singledispatch</span>
+    <span class="o">...</span><span class="p">:</span> <span class="k">def</span> <span class="nf">mytype</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">return</span> <span class="n">obj</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="o">@</span><span class="n">mytype</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span> <span class="k">def</span> <span class="nf">handle_list</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">print</span><span class="p">(</span><span class="s">"i am list"</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">return</span> <span class="n">obj</span>
+
+<span class="c1"># 返回 list 之前，打印自己的类型
+</span><span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="n">mytype</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">i</span> <span class="n">am</span> <span class="nb">list</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># 因为没有注册对于字符串的处理函数，所以会直接返回 obj，即 mytype 的处理逻辑。
+</span><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="n">mytype</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="s">'a'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>下面我们来构建一个可以处理嵌套字典的 <code class="highlighter-rouge">dict2obj</code> 函数</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="o">@</span><span class="n">singledispatch</span>
+    <span class="o">...</span><span class="p">:</span> <span class="k">def</span> <span class="nf">dict2obj</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">return</span> <span class="n">o</span>
+    <span class="o">...</span><span class="p">:</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="o">@</span><span class="n">dict2obj</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span> <span class="k">def</span> <span class="nf">handle_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">return</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">dict2obj</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">})</span>
+    <span class="o">...</span><span class="p">:</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="o">@</span><span class="n">dict2obj</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="o">...</span><span class="p">:</span> <span class="k">def</span> <span class="nf">handle_list</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">:</span>     <span class="k">return</span> <span class="p">[</span> <span class="n">dict2obj</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>测试一下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="rouge-code"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="n">zhangsan</span> <span class="o">=</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'san'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'zhang'</span><span class="p">},</span> <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="n">lisi</span> <span class="o">=</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'si'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'li'</span><span class="p">},</span> <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s">'friends'</span><span class="p">:</span> <span class="p">[</span><span class="n">zhangsan</span><span class="p">]}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">32</span><span class="p">]:</span> <span class="n">lisi</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">32</span><span class="p">]:</span>
+<span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'si'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'li'</span><span class="p">},</span>
+ <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+ <span class="s">'friends'</span><span class="p">:</span> <span class="p">[{</span><span class="s">'name'</span><span class="p">:</span> <span class="p">{</span><span class="s">'first'</span><span class="p">:</span> <span class="s">'san'</span><span class="p">,</span> <span class="s">'last'</span><span class="p">:</span> <span class="s">'zhang'</span><span class="p">},</span> <span class="s">'hp'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}]}</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">33</span><span class="p">]:</span> <span class="n">obj_lisi</span> <span class="o">=</span> <span class="n">dict2obj</span><span class="p">(</span><span class="n">lisi</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="n">obj_lisi</span><span class="o">.</span><span class="n">name</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="n">namespace</span><span class="p">(</span><span class="n">first</span><span class="o">=</span><span class="s">'si'</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="s">'li'</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">35</span><span class="p">]:</span> <span class="n">obj_lisi</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">35</span><span class="p">]:</span> <span class="s">'si'</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">36</span><span class="p">]:</span> <span class="n">obj_lisi</span><span class="o">.</span><span class="n">hp</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">36</span><span class="p">]:</span> <span class="mi">1000</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">37</span><span class="p">]:</span> <span class="n">obj_lisi</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">37</span><span class="p">]:</span> <span class="n">namespace</span><span class="p">(</span><span class="n">first</span><span class="o">=</span><span class="s">'san'</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="s">'zhang'</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">38</span><span class="p">]:</span> <span class="n">obj_lisi</span><span class="o">.</span><span class="n">friends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">38</span><span class="p">]:</span> <span class="s">'san'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="完整演示代码">完整演示代码</h2>
+
+<p><a href="https://gist.github.com/mayneyao/6a09bd97237f23c0cb68730715b21851">https://gist.github.com/mayneyao/6a09bd97237f23c0cb68730715b21851</a></p>
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2019-07-19">19 Jul 2019</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#Python">Python</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#Python">#Python</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="//python/2019/07/18/Meomery-Cache.html"> &laquo; 常用内存缓存 cache模块</a>
+            
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <!-- Gitalk start -->
+<div id="gitalk-container"></div> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> 
+<script>
+    var gitalk  = new Gitalk ({
+        id: window.location.pathname,   // Ensure uniqueness and length less than 50
+        clientID: 'c00c8118274d907f3b2f ',
+        clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba',
+        repo: 'touchmyfish.com',
+        owner: 'touchmyfish',
+        admin: ['elfgzp'],
+		    distractionFreeMode: false  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script> 
+<!-- Gitalk end -->
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+
+</div>
+
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">标签 <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/categories#Python">Python (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#tools">tools (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#golang">golang (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2019 Touch My Fish 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/assets/js/mediumish.js"></script>
+
+
+
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+</body>
+</html>

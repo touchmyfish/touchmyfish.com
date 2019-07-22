@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "https://touchmyfish.netlify.com"
+  to = "https://touchmyfish.com"
+  status = 200
+  force = true

@@ -1,0 +1,17 @@
+language: ruby
+cache: bundler
+rvm:
+- 2.3.3
+script:
+- bundle install
+- rm -rf _site/
+- bundle exec jekyll build
+after_success:
+- "./push.sh"
+branches:
+  only:
+  - master
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+  - secure: c/2/GcsFARgDdhApqzUlwKxp3OLf/RMSOq4iDxZm3I6AJk+5uqrjD96U79xvPKIesANvoKcn/ned1euqzuJ7v0rVolSFDG7DIEVAuo6uOOq1eIc42PjdzJ0dLptQ+y7cK660qwJk42BwG/YuTqUpMlG/T90FwBgSOyj/l1emCTHSC7kyTD8Ax9yJqFFfNSw5wQGADEeu90SwozsbbkhcJqRRRuAAWUqdfDm86hmW7YZc45arAM3hNB7/wX2SMWKq/q3OF87c/6SgT6lrFFeXGKGPulZxP4kfog6cZoWNOHkdE6CkFMRW8408b3lPNDsx3xUenKspIHyuK55046K+N9XKRgoRGBcLvjIB4RKOIxWQEbnvrnG0am75c+P+qPlXUbgayFgrpxznDVWm1FPtJqxZyNaJ8sQ1iJHd//I3IGeEwk9L4LQTfLyuafHhiVSq+Oim8UyaPbgQbBckGGwndm9vD7kKh5brbFP7OO/+W8XFskrxesV1vtooOnwqSlpyGxT8/UYofVjDcW3VSey8ouoBwJxyGyL1OVT+O/fRoSg1iMCxiqehCAeZ6sdZiDxBnWo7qmN2uJNlGbIYC/bbe1ArEr+6PVl0ACRFo5cwRsA/wbLdMsu996JPGcfR0/Pjst+und9pbpon/jrLR+SoHGrMyvQ0iPsnFsQZwdjpjTE=

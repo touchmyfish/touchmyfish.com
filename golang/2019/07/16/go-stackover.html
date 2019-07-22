@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/assets/images/logo.png">
+
+<title>go fmt 引起的 stack overflow | Touch My Fish</title>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>go fmt 引起的 stack overflow | Touch My Fish</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="go fmt 引起的 stack overflow" />
+<meta name="author" content="vnotes" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="struct String() 遇到的坑" />
+<meta property="og:description" content="struct String() 遇到的坑" />
+<meta property="og:site_name" content="Touch My Fish" />
+<meta property="og:image" content="/assets/images/vnotes/2019-07-16-go-stackover.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-16T09:00:00+00:00" />
+<script type="application/ld+json">
+{"description":"struct String() 遇到的坑","author":{"@type":"Person","name":"vnotes"},"@type":"BlogPosting","url":"/golang/2019/07/16/go-stackover.html","image":"/assets/images/vnotes/2019-07-16-go-stackover.jpg","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/assets/images/logo.png"},"name":"vnotes"},"headline":"go fmt 引起的 stack overflow","dateModified":"2019-07-16T09:00:00+00:00","datePublished":"2019-07-16T09:00:00+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"/golang/2019/07/16/go-stackover.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/assets/css/screen.css" rel="stylesheet">
+
+<link href="/assets/css/main.css" rel="stylesheet">
+
+<script src="/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="Touch My Fish">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/index.html">文章</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/categories">分类</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/about">关于我们</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/touchmyfish/touchmyfish.com"><i class="fab fa-github"></i> Star on Github</a>
+                </li>
+
+                <script src="/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="搜索 ..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Touch My Fish</h1>
+    <p class="lead">
+        热爱技术的小伙伴集结地，一起分享技术，一起摸鱼吧🐟
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=go fmt 引起的 stack overflow&url=/golang/2019/07/16/go-stackover.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=/golang/2019/07/16/go-stackover.html" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=/golang/2019/07/16/go-stackover.html" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                            
+                                    <img class="author-thumb" src="/assets/images/avatar/mianma.png" alt="vnotes">
+                             
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.jianshu.com/u/a06aea098aac">vnotes</a><a target="_blank" href="https://github.com/vnotes" class="btn follow">Follow</a>
+                        </br>
+                        <span class="author-description"></span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">go fmt 引起的 stack overflow</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+                
+                <img class="featured-image img-fluid" src="/assets/images/vnotes/2019-07-16-go-stackover.jpg" alt="go fmt 引起的 stack overflow">
+                
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p>在 GO 里实现 String 方法会格式化输出。例如：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">People</span> <span class="n">struct</span> <span class="p">{</span>
+	<span class="n">Name</span> <span class="k">string</span>
+	<span class="n">Age</span>  <span class="n">int</span>
+	<span class="n">Sex</span>  <span class="k">string</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="p">(</span><span class="n">p</span> <span class="p">*</span><span class="n">People</span><span class="p">)</span> <span class="k">String</span><span class="p">()</span> <span class="k">string</span> <span class="p">{</span>
+	<span class="n">return</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s2">"people info: %+v"</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">p</span> <span class="p">:=</span> <span class="p">&amp;</span><span class="n">People</span><span class="p">{</span><span class="n">Name</span><span class="p">:</span> <span class="s2">"Lucy"</span><span class="p">,</span> <span class="n">Age</span><span class="p">:</span> <span class="m">18</span><span class="p">,</span> <span class="n">Sex</span><span class="p">:</span> <span class="s2">"M"</span><span class="p">}</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>预期的结果是：<code class="highlighter-rouge">people info: &amp;{Name:Lucy Age:18 Sex:M}</code>
+实际的结果是：</p>
+<blockquote>
+  <p>runtime: goroutine stack exceeds 1000000000-byte limit
+fatal error: stack overflow
+runtime stack:</p>
+</blockquote>
+
+<p>在 go 的源码里：<code class="highlighter-rouge">src/fmt/print.go::Stringer</code>， <code class="highlighter-rouge">Stringer</code> 接口有 <code class="highlighter-rouge">String</code> 方法，<code class="highlighter-rouge">People</code> struct  也有 <code class="highlighter-rouge">String</code> 方法，间接实现了 <code class="highlighter-rouge">Stringer</code> 接口，因此出现了 <code class="highlighter-rouge">stack overflow</code> 的错误，递归了。</p>
+
+<h2 id="解决办法">解决办法：</h2>
+<ul>
+  <li>把 <code class="highlighter-rouge">String</code> 方法改为 <code class="highlighter-rouge">ToString</code></li>
+  <li>在 <code class="highlighter-rouge">People.String</code> 方法里传递属性，即把 <code class="highlighter-rouge">fmt.Sprintf("people info: %+v", p)</code> 改为 <code class="highlighter-rouge">fmt.Sprintf("people info: Name:%s, Age:%d, Sex:%s", p.Name, p.Age, p.Sex)</code></li>
+</ul>
+
+<p>参考文章:<a href="[http://xiaorui.cc/2019/06/17/golang-fmt%E9%80%92%E5%BD%92%E5%BC%95%E8%B5%B7stack-overflow%E5%BC%82%E5%B8%B8/](http://xiaorui.cc/2019/06/17/golang-fmt%E9%80%92%E5%BD%92%E5%BC%95%E8%B5%B7stack-overflow%E5%BC%82%E5%B8%B8/)"> golang fmt递归引起stack overflow异常</a></p>
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2019-07-16">16 Jul 2019</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#golang">golang</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#golang">#golang</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="//tools/2019/07/14/lazydocker.html"> &laquo; lazydocker 使用时 log 过长的解决方案</a>
+            
+            
+            <a class="next d-block col-md-6 text-lg-right" href="//python/2019/07/17/GIL-Thread-safe.html">GIL与python线程安全 单例模式 singleton &raquo; </a>
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <!-- Gitalk start -->
+<div id="gitalk-container"></div> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> 
+<script>
+    var gitalk  = new Gitalk ({
+        id: window.location.pathname,   // Ensure uniqueness and length less than 50
+        clientID: 'c00c8118274d907f3b2f ',
+        clientSecret: 'f86b1824c258bfa65cfb0556e769a222b11e39ba',
+        repo: 'touchmyfish.com',
+        owner: 'touchmyfish',
+        admin: ['elfgzp'],
+		    distractionFreeMode: false  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script> 
+<!-- Gitalk end -->
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+
+</div>
+
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">标签 <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/categories#Python">Python (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#tools">tools (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#golang">golang (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2019 Touch My Fish 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/assets/js/mediumish.js"></script>
+
+
+
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+</body>
+</html>
